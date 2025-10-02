@@ -48,7 +48,7 @@ export function VerifyDialog() {
           title: 'Success!',
           description: result.message,
         });
-        router.push('/demo');
+        router.push('/login');
       } else {
         toast({
           variant: 'destructive',
