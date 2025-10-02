@@ -2,29 +2,20 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Google, Microsoft } from '@/components/icons';
+import { Discord } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { DotGrid } from '@/components/dot-grid';
-import { cn } from '@/lib/utils';
 import { FadeIn } from '@/components/fade-in';
 
-const platformIcons = {
-  google: <Google className="size-5" />,
-  github: <Github className="size-5" />,
-  microsoft: <Microsoft className="size-5" />,
-};
-
-type Platform = keyof typeof platformIcons;
-
 export default function LoginPage() {
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform>('google');
+  const [isDiscordHovered, setIsDiscordHovered] = useState(false);
 
   const platformVariants = {
     active: {
-      scale: 1.2,
+      scale: 1.1,
       borderColor: 'hsl(var(--primary))',
       color: 'hsl(var(--primary-foreground))',
     },
@@ -37,7 +28,7 @@ export default function LoginPage() {
   
   const iconVariants = {
     active: {
-      color: 'hsl(var(--primary))',
+      color: '#5865F2', // Discord's brand color
       scale: 1.2,
     },
     inactive: {
@@ -94,31 +85,23 @@ export default function LoginPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              {(['google', 'github', 'microsoft'] as Platform[]).map(
-                (platform, i) => (
-                  <motion.button
-                    key={platform}
-                    onClick={() => setSelectedPlatform(platform)}
-                    className="group relative flex size-12 items-center justify-center rounded-full border bg-card transition-colors hover:bg-accent"
-                    animate={
-                      selectedPlatform === platform ? 'active' : 'inactive'
-                    }
-                    variants={platformVariants}
-                    transition={{ duration: 0.3, ease: 'backOut' }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div
-                      animate={
-                        selectedPlatform === platform ? 'active' : 'inactive'
-                      }
-                      variants={iconVariants}
-                    >
-                      {platformIcons[platform]}
-                    </motion.div>
-                  </motion.button>
-                )
-              )}
+              <motion.button
+                onHoverStart={() => setIsDiscordHovered(true)}
+                onHoverEnd={() => setIsDiscordHovered(false)}
+                className="group relative flex size-12 items-center justify-center rounded-full border bg-card transition-colors hover:bg-accent"
+                animate={isDiscordHovered ? 'active' : 'inactive'}
+                variants={platformVariants}
+                transition={{ duration: 0.3, ease: 'backOut' }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div
+                  animate={isDiscordHovered ? 'active' : 'inactive'}
+                  variants={iconVariants}
+                >
+                  <Discord className="size-6" />
+                </motion.div>
+              </motion.button>
             </motion.div>
 
             <motion.div
