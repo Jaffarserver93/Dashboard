@@ -79,22 +79,21 @@ const pricingTiers = [
 export default function Home() {
   return (
     <div className="relative flex min-h-screen w-full flex-col">
+      <DotGrid
+        dotSize={2}
+        gap={20}
+        baseColor="hsl(var(--primary))"
+        activeColor="hsl(var(--primary))"
+        proximity={100}
+        shockRadius={200}
+        shockStrength={2}
+        resistance={500}
+        returnDuration={0.5}
+        className="opacity-20"
+      />
       <Header />
       <main className="flex-1">
         <section className="container mx-auto px-4 pt-32 pb-16 text-center md:px-6 md:pt-48 md:pb-24">
-          <div style={{ width: '100%', height: '600px', position: 'relative' }}>
-            <DotGrid
-              dotSize={10}
-              gap={15}
-              baseColor="#5227FF"
-              activeColor="#5227FF"
-              proximity={120}
-              shockRadius={250}
-              shockStrength={5}
-              resistance={750}
-              returnDuration={1.5}
-            />
-          </div>
           <FadeIn>
             <div className="mb-4 inline-block rounded-full bg-secondary px-3 py-1 text-sm text-primary">
               Now in Public Beta
