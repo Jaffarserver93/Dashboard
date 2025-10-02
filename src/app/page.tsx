@@ -1,8 +1,9 @@
 import { DotGrid } from "@/components/dot-grid";
+import { VerifyDialog } from "@/components/verify-dialog";
 
 export default function Home() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center">
       <DotGrid
         dotSize={5}
         gap={15}
@@ -14,7 +15,9 @@ export default function Home() {
         resistance={750}
         returnDuration={1.5}
       />
-      <main className="flex-1"></main>
+      <main className="flex flex-1 items-center justify-center">
+        <VerifyDialog />
+      </main>
     </div>
   );
 }
