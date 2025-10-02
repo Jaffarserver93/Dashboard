@@ -23,7 +23,7 @@ export function Header() {
         <Link href="#" className="flex items-center gap-3" prefetch={false}>
           <Logo />
           <span className="text-xl font-semibold text-foreground">
-            Dot Landing
+            jxfr
           </span>
         </Link>
         <nav className="hidden items-center space-x-6 text-sm md:flex">

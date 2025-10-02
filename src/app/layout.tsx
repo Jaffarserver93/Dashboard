@@ -5,7 +5,7 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Dot Landing",
+  title: "jxfr",
   description: "A modern landing page with a dot grid theme.",
 };
 

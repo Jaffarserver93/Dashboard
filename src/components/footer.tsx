@@ -23,7 +23,7 @@ export function Footer() {
           <Link href="#" className="flex items-center gap-3" prefetch={false}>
             <Logo />
             <span className="text-xl font-semibold text-foreground">
-              Dot Landing
+              jxfr
             </span>
           </Link>
           <p className="text-muted-foreground">
@@ -64,7 +64,7 @@ export function Footer() {
         </div>
         <div className="flex flex-col gap-2 md:items-end">
           <p className="text-muted-foreground">
-            &copy; {new Date().getFullYear()} Dot Landing, Inc.
+            &copy; {new Date().getFullYear()} jxfr, Inc.
           </p>
           <div className="flex gap-4">
             <Link href="#" className="text-muted-foreground hover:text-foreground">
