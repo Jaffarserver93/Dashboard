@@ -10,8 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { Button as MovingBorderButton } from '@/components/ui/moving-border';
 
 export function VerifyDialog() {
   const [isVerified, setIsVerified] = useState(false);
@@ -56,12 +55,14 @@ export function VerifyDialog() {
         />
       </CardContent>
       <CardFooter>
-        <div className="relative group w-full">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-          <Button className="w-full relative" disabled={!isVerified}>
-            Verify
-          </Button>
-        </div>
+        <MovingBorderButton
+          borderRadius="0.75rem"
+          className="w-full relative bg-slate-900 text-white"
+          disabled={!isVerified}
+          containerClassName="h-10 w-full"
+        >
+          Verify
+        </MovingBorderButton>
       </CardFooter>
     </Card>
   );
