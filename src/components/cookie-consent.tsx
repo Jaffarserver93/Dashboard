@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -28,7 +28,7 @@ export function CookieConsent() {
     }
   }, [isMounted]);
 
-  const handleAccept = (toastId: string) => {
+  const handleAccept = useCallback((toastId: string) => {
     try {
       localStorage.setItem("cookie_consent", "true");
     } catch (e) {
@@ -36,13 +36,13 @@ export function CookieConsent() {
     }
     setShowConsent(false);
     dismiss(toastId);
-  };
+  }, [dismiss]);
 
   useEffect(() => {
     let toastId: string | undefined;
 
     if (showConsent) {
-      const { id } = toast({
+      const { id, dismiss: dismissToast } = toast({
         duration: Infinity,
         title: "We use cookies",
         description: (
@@ -55,7 +55,10 @@ export function CookieConsent() {
           </p>
         ),
         action: (
-          <Button onClick={() => handleAccept(id)}>Accept</Button>
+          <Button onClick={() => {
+            handleAccept(id);
+            dismissToast();
+          }}>Accept</Button>
         ),
       });
       toastId = id;
@@ -67,7 +70,7 @@ export function CookieConsent() {
         }
     }
 
-  }, [showConsent, toast, dismiss]);
+  }, [showConsent, toast, dismiss, handleAccept]);
 
   return null;
 }
