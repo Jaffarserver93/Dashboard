@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { DotGrid } from '@/components/dot-grid';
 import { FadeIn } from '@/components/fade-in';
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,13 +27,7 @@ export default function LoginPage() {
   }, [router]);
 
   const handleDiscordLogin = () => {
-    const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
-    const redirectUri = process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI;
-    const scope = 'identify guilds.join';
-    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
-      redirectUri!
-    )}&response_type=code&scope=${encodeURIComponent(scope)}`;
-    window.location.href = discordAuthUrl;
+    signIn('discord', { callbackUrl: '/dashboard' });
   };
 
   const platformVariants = {
