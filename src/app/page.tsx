@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="relative flex min-h-screen w-full flex-col">
       <DotGrid
-        dotSize={2}
+        dotSize={3}
         gap={15}
         baseColor="#291d3b"
         activeColor="#00FFFF"
