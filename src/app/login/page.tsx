@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Discord } from '@/components/icons';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,18 @@ import { DotGrid } from '@/components/dot-grid';
 import { FadeIn } from '@/components/fade-in';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [isVerified, setIsVerified] = useState(false);
   const [isDiscordHovered, setIsDiscordHovered] = useState(false);
+
+  useEffect(() => {
+    const verified = sessionStorage.getItem('isVerified');
+    if (verified !== 'true') {
+      router.push('/');
+    } else {
+      setIsVerified(true);
+    }
+  }, [router]);
 
   const platformVariants = {
     active: {
@@ -35,6 +47,10 @@ export default function LoginPage() {
       color: 'hsl(var(--muted-foreground))',
       scale: 1,
     }
+  }
+
+  if (!isVerified) {
+    return null; // Or a loading spinner
   }
 
   return (

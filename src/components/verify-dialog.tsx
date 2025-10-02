@@ -48,6 +48,7 @@ export function VerifyDialog() {
           title: 'Success!',
           description: result.message,
         });
+        sessionStorage.setItem('isVerified', 'true');
         router.push('/login');
       } else {
         toast({
