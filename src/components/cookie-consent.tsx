@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export function CookieConsent() {
   const [showConsent, setShowConsent] = useState(false);
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
 
   useEffect(() => {
     try {
@@ -21,13 +21,14 @@ export function CookieConsent() {
     }
   }, []);
 
-  const handleAccept = () => {
+  const handleAccept = (toastId: string) => {
     try {
       localStorage.setItem("cookie_consent", "true");
     } catch (e) {
       // localStorage is not available
     }
     setShowConsent(false);
+    dismiss(toastId);
   };
 
   useEffect(() => {
@@ -45,18 +46,9 @@ export function CookieConsent() {
           </p>
         ),
         action: (
-          <Button onClick={() => {
-            handleAccept();
-            // Manually dismiss the toast since duration is Infinity
-             // We need to dismiss it manually
-            (window as any).dismissToast(id);
-          }}>Accept</Button>
+          <Button onClick={() => handleAccept(id)}>Accept</Button>
         ),
       });
-      // A bit of a hack to allow manual dismissal outside the component
-      (window as any).dismissToast = (toastId: string) => {
-        (window as any).toast?.dismiss(toastId);
-      }
     }
   }, [showConsent, toast]);
 
