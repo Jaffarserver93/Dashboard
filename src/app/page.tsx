@@ -4,16 +4,15 @@ export default function Home() {
   return (
     <div className="relative flex min-h-screen w-full flex-col">
       <DotGrid
-        dotSize={2}
-        gap={20}
-        baseColor="hsl(var(--primary))"
-        activeColor="hsl(var(--primary))"
-        proximity={100}
-        shockRadius={200}
-        shockStrength={2}
-        resistance={500}
-        returnDuration={0.5}
-        className="opacity-20"
+        dotSize={10}
+        gap={15}
+        baseColor="#291d3b"
+        activeColor="#00FFFF"
+        proximity={120}
+        shockRadius={250}
+        shockStrength={5}
+        resistance={750}
+        returnDuration={1.5}
       />
       <main className="flex-1"></main>
     </div>
