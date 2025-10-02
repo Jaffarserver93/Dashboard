@@ -25,6 +25,16 @@ export default function LoginPage() {
     }
   }, [router]);
 
+  const handleDiscordLogin = () => {
+    const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
+    const redirectUri = process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI;
+    const scope = 'identify guilds.join';
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri!
+    )}&response_type=code&scope=${encodeURIComponent(scope)}`;
+    window.location.href = discordAuthUrl;
+  };
+
   const platformVariants = {
     active: {
       scale: 1.1,
@@ -102,6 +112,7 @@ export default function LoginPage() {
               transition={{ delay: 0.6 }}
             >
               <motion.button
+                onClick={handleDiscordLogin}
                 onHoverStart={() => setIsDiscordHovered(true)}
                 onHoverEnd={() => setIsDiscordHovered(false)}
                 className="group relative flex size-12 items-center justify-center rounded-full border bg-card transition-colors hover:bg-accent"
