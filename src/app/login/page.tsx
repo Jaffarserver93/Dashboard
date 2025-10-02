@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Discord } from '@/components/icons';
+import { DiscordLogo } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -115,7 +115,7 @@ export default function LoginPage() {
                   animate={isDiscordHovered ? 'active' : 'inactive'}
                   variants={iconVariants}
                 >
-                  <Discord className="size-6" />
+                  <DiscordLogo className="size-6" />
                 </motion.div>
               </motion.button>
             </motion.div>
