@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Turnstile } from '@marsidev/react-turnstile';
 import {
   Card,
@@ -24,6 +25,7 @@ export function VerifyDialog() {
     message: string;
   } | null>(null);
 
+  const router = useRouter();
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const { toast } = useToast();
 
@@ -46,6 +48,7 @@ export function VerifyDialog() {
           title: 'Success!',
           description: result.message,
         });
+        router.push('/demo');
       } else {
         toast({
           variant: 'destructive',
