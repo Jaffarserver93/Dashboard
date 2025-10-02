@@ -6,20 +6,27 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 export function CookieConsent() {
-  const [showConsent, setShowConsent] = useState(false);
   const { toast, dismiss } = useToast();
+  const [isMounted, setIsMounted] = useState(false);
+  const [showConsent, setShowConsent] = useState(false);
 
   useEffect(() => {
-    try {
-      const consent = localStorage.getItem("cookie_consent");
-      if (consent !== "true") {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      try {
+        const consent = localStorage.getItem("cookie_consent");
+        if (consent !== "true") {
+          setShowConsent(true);
+        }
+      } catch (e) {
+        // localStorage is not available, assume we need to show consent
         setShowConsent(true);
       }
-    } catch (e) {
-      // localStorage is not available
-      setShowConsent(true);
     }
-  }, []);
+  }, [isMounted]);
 
   const handleAccept = (toastId: string) => {
     try {
@@ -32,6 +39,8 @@ export function CookieConsent() {
   };
 
   useEffect(() => {
+    let toastId: string | undefined;
+
     if (showConsent) {
       const { id } = toast({
         duration: Infinity,
@@ -49,8 +58,16 @@ export function CookieConsent() {
           <Button onClick={() => handleAccept(id)}>Accept</Button>
         ),
       });
+      toastId = id;
     }
-  }, [showConsent, toast]);
+    
+    return () => {
+        if(toastId) {
+            dismiss(toastId);
+        }
+    }
+
+  }, [showConsent, toast, dismiss]);
 
   return null;
 }
