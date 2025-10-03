@@ -24,7 +24,7 @@ export function VerifyDialog() {
     success: boolean;
     message: string;
   } | null>(null);
-  const [widgetKey, setWidgetKey] = useState(0);
+  const [widgetKey, setWidgetKey] = useState(Date.now()); // Use a timestamp to ensure it's unique on load
 
   const router = useRouter();
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -59,7 +59,7 @@ export function VerifyDialog() {
           description: result.message,
         });
         // Reset Turnstile on failure by changing the key
-        setWidgetKey((prev) => prev + 1);
+        setWidgetKey(Date.now());
         setIsVerified(false);
         setToken(null);
       }
@@ -73,7 +73,7 @@ export function VerifyDialog() {
         description: errorMessage,
       });
       // Reset Turnstile on failure
-      setWidgetKey((prev) => prev + 1);
+      setWidgetKey(Date.now());
       setIsVerified(false);
       setToken(null);
     } finally {
@@ -110,7 +110,7 @@ export function VerifyDialog() {
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
         <Turnstile
-          key={widgetKey} // Use a dedicated state to reset the component
+          key={widgetKey}
           siteKey={siteKey}
           onSuccess={(token) => {
             setIsVerified(true);
@@ -121,6 +121,11 @@ export function VerifyDialog() {
             setToken(null);
           }}
           onError={() => {
+            toast({
+              variant: 'destructive',
+              title: 'Challenge Failed',
+              description: 'Could not load the verification challenge. Please check your connection and try again.',
+            });
             setIsVerified(false);
             setToken(null);
           }}
