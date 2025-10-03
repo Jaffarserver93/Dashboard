@@ -24,6 +24,7 @@ export function VerifyDialog() {
     success: boolean;
     message: string;
   } | null>(null);
+  const [widgetKey, setWidgetKey] = useState(0);
 
   const router = useRouter();
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -40,10 +41,10 @@ export function VerifyDialog() {
     }
     setIsLoading(true);
     // Clear previous verification result before starting a new one
-    setVerificationResult(null); 
+    setVerificationResult(null);
     try {
       const result = await verifyTurnstile(token);
-      
+
       if (result.success) {
         toast({
           title: 'Success!',
@@ -57,7 +58,8 @@ export function VerifyDialog() {
           title: 'Verification Failed',
           description: result.message,
         });
-        // Reset Turnstile on failure by changing the state
+        // Reset Turnstile on failure by changing the key
+        setWidgetKey((prev) => prev + 1);
         setIsVerified(false);
         setToken(null);
       }
@@ -70,7 +72,8 @@ export function VerifyDialog() {
         title: 'Error',
         description: errorMessage,
       });
-       // Reset Turnstile on failure
+      // Reset Turnstile on failure
+      setWidgetKey((prev) => prev + 1);
       setIsVerified(false);
       setToken(null);
     } finally {
@@ -107,7 +110,7 @@ export function VerifyDialog() {
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
         <Turnstile
-          key={token} // Reset the component when token is reset
+          key={widgetKey} // Use a dedicated state to reset the component
           siteKey={siteKey}
           onSuccess={(token) => {
             setIsVerified(true);
