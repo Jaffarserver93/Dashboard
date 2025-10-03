@@ -2,10 +2,16 @@ import { DotGrid } from "@/components/dot-grid";
 import { VerifyDialog } from "@/components/verify-dialog";
 import LoginPage from "./login/page";
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const isCloudflareEnabled = process.env.CLOUDFLARE_ENABLED === 'true';
+  const isVerified = searchParams?.verified === 'true';
 
-  if (isCloudflareEnabled) {
+  // If cloudflare is enabled AND the user is not verified yet, show the dialog.
+  if (isCloudflareEnabled && !isVerified) {
     return (
       <div className="relative flex min-h-screen w-full flex-col items-center justify-center">
         <DotGrid
@@ -26,5 +32,6 @@ export default function Home() {
     );
   }
 
+  // Otherwise, show the login page.
   return <LoginPage />;
 }

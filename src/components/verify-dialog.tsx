@@ -48,10 +48,7 @@ export function VerifyDialog() {
           title: 'Success!',
           description: result.message,
         });
-        sessionStorage.setItem('isVerified', 'true');
-        // Instead of routing, we can just let the parent component handle the state change
-        // This makes the component more reusable
-        window.location.reload(); // Reload to let the server re-evaluate the page
+        router.push('/?verified=true');
       } else {
         toast({
           variant: 'destructive',
@@ -70,9 +67,11 @@ export function VerifyDialog() {
       });
     } finally {
       setIsLoading(false);
-      // Reset Turnstile
-      setIsVerified(false);
-      setToken(null);
+      // Reset Turnstile on failure
+      if (!verificationResult?.success) {
+        setIsVerified(false);
+        setToken(null);
+      }
     }
   };
 
@@ -122,8 +121,8 @@ export function VerifyDialog() {
             theme: 'dark',
           }}
         />
-        {verificationResult && (
-          <Alert variant={verificationResult.success ? 'default' : 'destructive'} className="mt-4">
+        {verificationResult && !verificationResult.success && (
+          <Alert variant={'destructive'} className="mt-4">
             <AlertDescription>{verificationResult.message}</AlertDescription>
           </Alert>
         )}
