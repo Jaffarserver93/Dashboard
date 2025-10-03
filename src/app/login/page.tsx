@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { DiscordLogo } from '@/components/icons';
@@ -13,18 +13,7 @@ import { FadeIn } from '@/components/fade-in';
 import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [isVerified, setIsVerified] = useState(false);
   const [isDiscordHovered, setIsDiscordHovered] = useState(false);
-
-  useEffect(() => {
-    const verified = sessionStorage.getItem('isVerified');
-    if (verified !== 'true') {
-      router.push('/');
-    } else {
-      setIsVerified(true);
-    }
-  }, [router]);
 
   const handleDiscordLogin = () => {
     signIn('discord', { callbackUrl: '/dashboard' });
@@ -52,10 +41,6 @@ export default function LoginPage() {
       color: 'hsl(var(--muted-foreground))',
       scale: 1,
     }
-  }
-
-  if (!isVerified) {
-    return null; // Or a loading spinner
   }
 
   return (
