@@ -1,5 +1,7 @@
 'use server';
 
+import { headers } from 'next/headers';
+
 export async function verifyTurnstile(token: string) {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
   if (!secretKey) {
@@ -11,6 +13,12 @@ export async function verifyTurnstile(token: string) {
   const formData = new FormData();
   formData.append('secret', secretKey);
   formData.append('response', token);
+
+  // Add remote IP to the request, but make it optional
+  const ip = headers().get('x-forwarded-for') ?? headers().get('cf-connecting-ip');
+  if (ip) {
+    formData.append('remoteip', ip);
+  }
 
   try {
     const response = await fetch(verificationUrl, {
