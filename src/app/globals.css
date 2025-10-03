@@ -86,3 +86,16 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .striped-background {
+    background-color: hsl(var(--background));
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 10px,
+      hsl(var(--border) / 0.1) 10px,
+      hsl(var(--border) / 0.1) 20px
+    );
+  }
+}

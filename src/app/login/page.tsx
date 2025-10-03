@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { DotGrid } from '@/components/dot-grid';
 import { FadeIn } from '@/components/fade-in';
 import { signIn } from 'next-auth/react';
 
@@ -43,16 +42,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden">
-      <DotGrid
-        dotSize={3}
-        gap={25}
-        baseColor="hsl(var(--muted-foreground) / 0.3)"
-        activeColor="hsl(var(--primary))"
-        proximity={100}
-        shockRadius={200}
-        shockStrength={3}
-      />
+    <div className="striped-background relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden">
       <div className="relative z-10 flex w-full max-w-md flex-col items-center">
         <FadeIn delay={100}>
           <motion.div
