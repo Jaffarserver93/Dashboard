@@ -62,9 +62,9 @@ export default function LoginPage() {
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden">
       <DotGrid
         dotSize={3}
-        gap={15}
-        baseColor="#291d3b"
-        activeColor="#00FFFF"
+        gap={25}
+        baseColor="hsl(var(--muted-foreground) / 0.3)"
+        activeColor="hsl(var(--primary))"
         proximity={100}
         shockRadius={200}
         shockStrength={3}
