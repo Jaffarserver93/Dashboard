@@ -63,8 +63,8 @@ export default function LoginPage() {
       <DotGrid
         dotSize={3}
         gap={15}
-        baseColor="hsl(var(--accent))"
-        activeColor="hsl(var(--primary))"
+        baseColor="#291d3b"
+        activeColor="#00FFFF"
         proximity={100}
         shockRadius={200}
         shockStrength={3}
