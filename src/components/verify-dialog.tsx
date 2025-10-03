@@ -17,14 +17,10 @@ import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from './ui/alert';
 
 export function VerifyDialog() {
-  const [isVerified, setIsVerified] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [verificationResult, setVerificationResult] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
-  const [widgetKey, setWidgetKey] = useState(Date.now()); // Use a timestamp to ensure it's unique on load
+  const [verificationError, setVerificationError] = useState<string | null>(null);
+  const [widgetKey, setWidgetKey] = useState(`turnstile-${Date.now()}`);
 
   const router = useRouter();
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -32,16 +28,12 @@ export function VerifyDialog() {
 
   const handleVerify = async () => {
     if (!token) {
-      toast({
-        variant: 'destructive',
-        title: 'Verification Failed',
-        description: 'No verification token received. Please try again.',
-      });
+      setVerificationError('The verification challenge has expired. Please complete it again.');
       return;
     }
     setIsLoading(true);
-    // Clear previous verification result before starting a new one
-    setVerificationResult(null);
+    setVerificationError(null); // Clear previous errors before a new attempt
+
     try {
       const result = await verifyTurnstile(token);
 
@@ -52,34 +44,37 @@ export function VerifyDialog() {
         });
         router.push('/?verified=true');
       } else {
-        setVerificationResult(result);
-        toast({
-          variant: 'destructive',
-          title: 'Verification Failed',
-          description: result.message,
-        });
-        // Reset Turnstile on failure by changing the key
-        setWidgetKey(Date.now());
-        setIsVerified(false);
+        setVerificationError(result.message);
+        // Reset Turnstile on failure to allow a retry
+        setWidgetKey(`turnstile-${Date.now()}`);
         setToken(null);
       }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'An unknown error occurred.';
-      setVerificationResult({ success: false, message: errorMessage });
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: errorMessage,
-      });
+      setVerificationError(errorMessage);
       // Reset Turnstile on failure
-      setWidgetKey(Date.now());
-      setIsVerified(false);
+      setWidgetKey(`turnstile-${Date.now()}`);
       setToken(null);
     } finally {
       setIsLoading(false);
     }
   };
+  
+  const handleSuccess = (t: string) => {
+    setToken(t);
+    setVerificationError(null); // Clear any errors when a new token is received
+  }
+
+  const handleExpire = () => {
+    setToken(null);
+    setVerificationError("The verification challenge has expired. Please complete it again.");
+  }
+
+  const handleError = () => {
+    setVerificationError("Could not load the verification challenge. Please check your connection and try again.");
+    setToken(null);
+  }
 
   if (!siteKey) {
     return (
@@ -112,30 +107,16 @@ export function VerifyDialog() {
         <Turnstile
           key={widgetKey}
           siteKey={siteKey}
-          onSuccess={(token) => {
-            setIsVerified(true);
-            setToken(token);
-          }}
-          onExpire={() => {
-            setIsVerified(false);
-            setToken(null);
-          }}
-          onError={() => {
-            toast({
-              variant: 'destructive',
-              title: 'Challenge Failed',
-              description: 'Could not load the verification challenge. Please check your connection and try again.',
-            });
-            setIsVerified(false);
-            setToken(null);
-          }}
+          onSuccess={handleSuccess}
+          onExpire={handleExpire}
+          onError={handleError}
           options={{
             theme: 'dark',
           }}
         />
-        {verificationResult && !verificationResult.success && (
+        {verificationError && (
           <Alert variant={'destructive'} className="mt-4">
-            <AlertDescription>{verificationResult.message}</AlertDescription>
+            <AlertDescription>{verificationError}</AlertDescription>
           </Alert>
         )}
       </CardContent>
@@ -144,7 +125,7 @@ export function VerifyDialog() {
           onClick={handleVerify}
           borderRadius="0.75rem"
           className="w-full relative bg-slate-900 text-white"
-          disabled={!isVerified || isLoading}
+          disabled={!token || isLoading}
           containerClassName="h-10 w-full"
         >
           {isLoading ? 'Verifying...' : 'Verify'}
